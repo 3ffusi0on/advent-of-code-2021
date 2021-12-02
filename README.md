@@ -5,7 +5,7 @@ My solutions to the [Advent of Code 2021](https://adventofcode.com/2021) problem
 | Solutions                               | Lang       |      |
 | --------------------------------------- | ---------- | ---- |
 | [Day 01](./src/day01/)                  | JS         |  **  |
-| Day 02: ...                             | ...        | ...  |
+| [Day 02](./src/day02/)                  | JS         |  **  |
 | Day 03: ...                             | ...        | ...  |
 | Day 04: ...                             | ...        | ...  |
 | Day 05: ...                             | ...        | ...  |
