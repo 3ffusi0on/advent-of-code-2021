@@ -6,8 +6,8 @@ My solutions to the [Advent of Code 2021](https://adventofcode.com/2021) problem
 | --------------------------------------- | ---------- | ---- |
 | [Day 01](./src/day01/)                  | JS         |  **  |
 | [Day 02](./src/day02/)                  | JS         |  **  |
-| Day 03: ...                             | ...        | ...  |
-| Day 04: ...                             | ...        | ...  |
+| [Day 03](./src/day03/)                  | JS         |  **  |
+| [Day 04](./src/day04/)                  | JS         |  **  |
 | Day 05: ...                             | ...        | ...  |
 | Day 06: ...                             | ...        | ...  |
 | Day 07: ...                             | ...        | ...  |
