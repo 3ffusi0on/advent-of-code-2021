@@ -15,11 +15,11 @@ function readFile(fileName) {
     input.draws = lines[0].split(',')
     for (let l = 1; l < lines.length; l += 5) {
       input.boards.push([
-        lines[l    ].trim().split(/[ ]+/),
-        lines[l + 1].trim().split(/[ ]+/),
-        lines[l + 2].trim().split(/[ ]+/),
-        lines[l + 3].trim().split(/[ ]+/),
-        lines[l + 4].trim().split(/[ ]+/),
+        lines[l    ].trim().split(/[ ]+/).map((x) => parseInt(x)),
+        lines[l + 1].trim().split(/[ ]+/).map((x) => parseInt(x)),
+        lines[l + 2].trim().split(/[ ]+/).map((x) => parseInt(x)),
+        lines[l + 3].trim().split(/[ ]+/).map((x) => parseInt(x)),
+        lines[l + 4].trim().split(/[ ]+/).map((x) => parseInt(x)),
       ]);
     }
   } catch (err) {
@@ -33,63 +33,102 @@ function readFile(fileName) {
 function solve1() {
   var input = readFile('./resources/day04/input.txt');
 
-  var checkedBaord = []
-  var uncheckedBaord = input.boards
+  var checkedBoard = input.boards;
 
   for (let i = 0; i < input.draws.length; i++) {
-    const draw = input.draws[i];
+    const draw = parseInt(input.draws[i]);
     
-    for (let j = 0; j < input.boards.length; j++) {
-      const board = input.boards[j];
-      if (checkedBaord[j] === undefined) {
-        checkedBaord[j] = new Array(input.boards[0].length);
-      }
-      
-      for (let k = 0; k < board.length; k++) {
-        const row = board[k];
-        uncheckedBaord[j][k] = uncheckedBaord[j][k].filter(x => parseInt(x) != parseInt(draw));
+    for (let b = 0; b < input.boards.length; b++) {
+      const board = input.boards[b];
 
-
-        for (let l = 0; l < row.length; l++) {
-          if (parseInt(row[l]) == parseInt(draw)) {
-            if (checkedBaord[j][k] === undefined) {
-              checkedBaord[j][k] = [row[l]];
-            } else {
-              checkedBaord[j][k].push(row[l]);
-            }
-            
-            if (checkedBaord[j][l+5] === undefined) {
-              checkedBaord[j][l+5] = [row[l]];
-
-            } else {
-              checkedBaord[j][l+5].push(row[l]);
-            }
+      board.forEach((r, rIndex) => {
+        r.forEach((c, cIndex) => {
+          if (c === draw) {
+            checkedBoard[b][rIndex][cIndex] = "⭐" + draw; + "⭐";
           }
+        });
+      });
+
+      for (let r = 0; r < checkedBoard[b].length; r++) {
+        const row = board[r];
+        if (row.every((x) => x.toString().startsWith("⭐"))) {
+          return processSolution(checkedBoard[b], draw)
         }
       }
+
+      for (let c = 0; c < checkedBoard[b][0].length; c++) {
+        const col = checkedBoard[b].map((x) => x[c]);
+        if (col.every((x) => x.toString().startsWith("⭐"))) {
+          return processSolution(checkedBoard[b], draw)
+        }
+      }        
       
-      var solution = checkedBaord[j].find((row) => row != undefined && row.length === 5)
-      if (solution != undefined) {
-        
-        uncheckedBaord[j] = uncheckedBaord[j].filter((x) => x.length > 0)
-        var sum = 0;
-        for (let u = 0; u < uncheckedBaord[j].length; u++) {
-          const element = uncheckedBaord[j][u];
-          sum += element.reduce((a, b) => parseInt(a) + parseInt(b))
-        }
-        return sum * solution.slice(-1);
-      }
     }
   }
 
-  // console.log(checkedBaord);
   return [];
 }
 
-
-function solve2() {
-
+function processSolution(board, draw) {
+  var sum = 0;
+  for (let r = 0; r < board.length; r++) {
+    const row = board[r];
+    for (let c = 0; c < row.length; c++) {
+      if (!board[r][c].toString().startsWith("⭐")) {
+        sum += board[r][c]
+      }
+    }
+  }
+  return sum * draw;
 }
 
-console.log(solve1())
-// console.log(solve2())
+function solve2() {
+  var input = readFile('./resources/day04/input.txt');
+
+  var checkedBoard = input.boards;
+  var winner = {board: undefined, boardIndices: [], draw: undefined};
+
+  for (let i = 0; i < input.draws.length; i++) {
+    const draw = parseInt(input.draws[i]);
+    
+    for (let b = 0; b < input.boards.length; b++) {
+      const board = input.boards[b];
+
+      board.forEach((r, rIndex) => {
+        r.forEach((c, cIndex) => {
+          if (c === draw) {
+            checkedBoard[b][rIndex][cIndex] = "⭐" + draw; + "⭐";
+          }
+        });
+      });
+
+      for (let r = 0; r < checkedBoard[b].length; r++) {
+        const row = board[r];
+        if (row.every((x) => x.toString().startsWith("⭐"))) {
+          saveWinner(winner, checkedBoard, b, draw)
+        }
+      }
+
+      for (let c = 0; c < checkedBoard[b][0].length; c++) {
+        const col = checkedBoard[b].map((x) => x[c]);
+        if (col.every((x) => x.toString().startsWith("⭐"))) {
+          saveWinner(winner, checkedBoard, b, draw)
+        }
+      }       
+      
+    }
+  }
+
+  return processSolution(winner.board, winner.draw);
+}
+
+function saveWinner(winner, checkedBoard, b, draw) {
+  if (winner.draw == undefined || !winner.boardIndices.includes(b)) {
+    winner.board = JSON.parse(JSON.stringify(checkedBoard[b]))
+    winner.boardIndices.push(b);
+    winner.draw= draw;
+  }
+}
+
+console.log("Part 1:", solve1())
+console.log("Part 2:", solve2())
