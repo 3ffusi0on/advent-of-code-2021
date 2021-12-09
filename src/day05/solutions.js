@@ -29,7 +29,7 @@ function solve1() {
       let positions = getPointsOfStraightLine(line.x1, line.x2, line.y1, line.y2);
       positions.forEach((pos) => {
         var index = "🎄" + pos.x.toString() + "🎄" + pos.y.toString() + "🎄"
-        map[index] = map[index] + 1 || 1;
+        map[index] = parseInt(map[index]) + 1 || 1;
       });
     }
   })
@@ -47,7 +47,7 @@ function getPointsOfStraightLine(x1, x2, y1, y2) {
   const [minY, maxY] = [Math.min(y1, y2), Math.max(y1, y2)];
   for (let x = minX; x <= maxX; x++) {
     for (let y = minY; y <= maxY; y++) {
-      positions.push({x: x, y: y});
+      positions.push({x, y});
     }
   }
   return positions;
@@ -55,7 +55,7 @@ function getPointsOfStraightLine(x1, x2, y1, y2) {
 
 function getPointsOfDiagonal(x1, x2, y1, y2) {
   let positions = [];
-  let  y = y1;
+  let  y = parseInt(y1);
 
   if (x1 < x2) {
     for (let x = x1; x <= x2; x++) {
@@ -68,6 +68,7 @@ function getPointsOfDiagonal(x1, x2, y1, y2) {
       y = y1 < y2 ? y + 1 : y - 1;
     }
   }
+  console.log(positions);
   return positions;
 }
 
