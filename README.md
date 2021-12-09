@@ -12,7 +12,7 @@ My solutions to the [Advent of Code 2021](https://adventofcode.com/2021) problem
 | [Day 06](./src/day06/)                  | ...        | 💡💡 |
 | [Day 07](./src/day07/)                  | JS         | ⭐⭐ |
 | [Day 08](./src/day08/)                  | JS         | ⭐⭐ |
-| [Day 09](./src/day09/)                  | ...        | 💡💡 |
+| [Day 09](./src/day09/)                  | JS         | ⭐⭐ |
 | [Day 10](./src/day10/)                  | ...        | ...  |
 | [Day 11](./src/day11/)                  | ...        | ...  |
 | [Day 12](./src/day12/)                  | ...        | ...  |
