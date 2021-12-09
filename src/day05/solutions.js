@@ -7,7 +7,7 @@ function getInput() {
     data.forEach((line) => {
       if (line.length > 0) {
         let grp = line.match(/(\d+),(\d+) -> (\d+),(\d+)/);
-        input.push({x1: grp[1], y1: grp[2], x2: grp[3], y2: grp[4]});
+        input.push({x1: parseInt(grp[1]), y1: parseInt(grp[2]), x2: parseInt(grp[3]), y2: parseInt(grp[4])});
       }
     });
 
@@ -19,14 +19,13 @@ function getInput() {
   return input;
 }
 
-
 function solve1() {
   var input = getInput();
   var map = [];
 
   input.forEach((line) => {
     if (isStraigthLine(line.x1, line.x2, line.y1, line.y2)) {
-      let positions = getPointsOfStraightLine(line.x1, line.x2, line.y1, line.y2);
+      var positions = getPointsOfStraightLine(line.x1, line.x2, line.y1, line.y2);
       positions.forEach((pos) => {
         var index = "🎄" + pos.x.toString() + "🎄" + pos.y.toString() + "🎄"
         map[index] = parseInt(map[index]) + 1 || 1;
@@ -42,7 +41,7 @@ function isStraigthLine(x1, x2, y1, y2) {
 }
 
 function getPointsOfStraightLine(x1, x2, y1, y2) {
-  let positions = [];
+  var positions = [];
   const [minX, maxX] = [Math.min(x1, x2), Math.max(x1, x2)];
   const [minY, maxY] = [Math.min(y1, y2), Math.max(y1, y2)];
   for (let x = minX; x <= maxX; x++) {
@@ -54,21 +53,20 @@ function getPointsOfStraightLine(x1, x2, y1, y2) {
 }
 
 function getPointsOfDiagonal(x1, x2, y1, y2) {
-  let positions = [];
-  let  y = parseInt(y1);
+  var positions = [];
+  var y = parseInt(y1);
 
   if (x1 < x2) {
     for (let x = x1; x <= x2; x++) {
       positions.push({x, y});
-      y = y1 < y2 ? y + 1 : y - 1;
+      y = (y1 < y2 ? y + 1 : y - 1);
     }
   } else {
     for (let x = x1; x >= x2; x--) {
       positions.push({x, y});
-      y = y1 < y2 ? y + 1 : y - 1;
+      y = (y1 < y2 ? y + 1 : y - 1);
     }
   }
-  console.log(positions);
   return positions;
 }
 
@@ -98,3 +96,4 @@ function solve2() {
 
 console.log(solve1())
 console.log(solve2())
+
