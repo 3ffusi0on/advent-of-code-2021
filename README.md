@@ -29,4 +29,3 @@ My solutions to the [Advent of Code 2021](https://adventofcode.com/2021) problem
 | [Day 23](./src/day23/)                  | ...        | 🕒🕒 |
 | [Day 24](./src/day24/)                  | ...        | 🕒🕒 |
 | [Day 25](./src/day25/)                  | ...        | 🕒🕒 |
-| --------------------------------------- | ---------- | ---- |
