@@ -60,24 +60,41 @@ function solve1() {
 
 function solve2() {
   var input = getInput();
+
+  var count = polimerize(input.polymer, input.insertions, 0, 40, false);
+
+  var max = [...count].reduce((a, b) => a[1] > b[1] ? a : b);
+  var min = [...count].reduce((a, b) => a[1] < b[1] ? a : b);
+
+  return max[1] - min[1];
+}
+
+function polimerize(template, insertions, currentStep, lastStep, chunked = false) {
   var count = new Map();
-  var chunkSize = 19922945;
-  var chunks = [];
+  var chunkSize = 20000;
+  var totalChunkCount = new Map();
 
-  var template = input.polymer;
-  for (let s = 0; s < 40; s++) {
-    console.log(`chunking ${s}`, template.length);
+  for (let s = currentStep; s < lastStep; s++) {
     if (template.length > chunkSize) {
-      chunks.push(template.substring(0, chunkSize));
-      chunks.push(template.substring(chunkSize - 1)); // last char of 1st chunk is included
-    }
+      chunked = true;
+      var chunk = template.substring(0, chunkSize);
+      var newChunkCount = polimerize(chunk, insertions, s, lastStep, chunked);
+      template = template.substring(chunkSize - 1); // extra carater from chunk for jointure insertions
 
-    //TODO finish chinking algorithm
+      for (let [key, value] of newChunkCount) {
+        if (totalChunkCount.has(key)) {
+          totalChunkCount.set(key, totalChunkCount.get(key) + value);
+        } else {
+          totalChunkCount.set(key, value);
+        }
+      }
+      // console.log(chunk, totalChunkCount);
+    }
 
     var replaced = "";
     for (let i = 0; i < template.length; i++) {
       let leftover = template.substring(i);
-      let insertion = input.insertions.get(leftover[0] + leftover[1]);
+      let insertion = insertions.get(leftover[0] + leftover[1]);
       if (insertion !== undefined) {
         replaced = `${replaced}${leftover[0]}${insertion}`;
       } else {
@@ -87,6 +104,9 @@ function solve2() {
     template = replaced;
   }
 
+  if (chunked) {
+    template = template.substring(1); // remove extra carater from chunk to avoid duplicate
+  }
 
   for (let i = 0; i < template.length; i++) {
     let char = template[i];
@@ -97,14 +117,16 @@ function solve2() {
     }
   }
 
+  for (let [key, value] of totalChunkCount) {
+    if (count.has(key)) {
+      count.set(key, count.get(key) + value);
+    } else {
+      count.set(key, value);
+    }
+  }
 
-
-
-  var max = [...count].reduce((a, b) => a[1] > b[1] ? a : b);
-  var min = [...count].reduce((a, b) => a[1] < b[1] ? a : b);
-
-  return max[1] - min[1];
+  return count;
 }
 
-// console.log(solve1())
+console.log(solve1())
 console.log(solve2())
