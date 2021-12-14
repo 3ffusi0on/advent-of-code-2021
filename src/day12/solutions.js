@@ -8,7 +8,7 @@ function getInput() {
     var data = fs.readFileSync('./resources/day12/input.txt', 'UTF-8').split(/\r?\n/);
     // data = fs.readFileSync('./resources/day12/input-test3.txt', 'UTF-8').split(/\r?\n/);
     // data = fs.readFileSync('./resources/day12/input-test2.txt', 'UTF-8').split(/\r?\n/);
-    data = fs.readFileSync('./resources/day12/input-test1.txt', 'UTF-8').split(/\r?\n/);
+    // data = fs.readFileSync('./resources/day12/input-test1.txt', 'UTF-8').split(/\r?\n/);
     data.forEach((line) => {
       if (line.length > 0) {
         input.push(line.split("-"));
@@ -25,6 +25,7 @@ class Cave {
     this.isMultipleEntry = name.toUpperCase() === name;
     this.linkedCaves = [];
     this.visited = false;
+    this.visits = 0;
   }
 
   addLinkedCave(cave) {
@@ -122,16 +123,16 @@ function dfsPathEvolution(start, canForceVisit) {
     return 1
   }
 
-  if ((start.visited === true && start.isStart()) || (!start.isVisitable() && !canForceVisit)) {
+  if ((start.visits >= 1 && start.isStart()) || (start.visits >= 1 && !start.isMultipleEntry && !canForceVisit)) {
     return 0;
   }
   
-  start.visited = true;
+  start.visits += 1;
   var path = 0;
   for (let c = 0; c < start.linkedCaves.length; c++) {
-    path += dfsPathEvolution(start.linkedCaves[c], !( !start.isVisitable() || !canForceVisit) );
+    path += dfsPathEvolution(start.linkedCaves[c], !((start.visits > 1 && !start.isMultipleEntry) || !canForceVisit));
   }
-  start.visited = false;
+  start.visits -= 1;
 
   return path;
 }
